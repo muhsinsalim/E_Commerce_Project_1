@@ -5,7 +5,7 @@ import Footer from '../components/Layout/Footer'
 const EventsPage = () => {
   return (
     <div>
-      <Header/>
+      <Header activeHeading={4}/>
       <EventCard active={true}/>
       <EventCard active={true}/>
       <Footer/>

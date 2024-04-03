@@ -8,8 +8,10 @@ import {BiMenuAltLeft} from "react-icons/bi"
 import Dropdown from "./Dropdown";
 import NavBar from "./NavBar";
 import {CgProfile} from "react-icons/cg"
-
+import {  useSelector } from "react-redux";
 const Header = ({activeHeading}) => {
+  const {isAuthenticated,user } = useSelector((state) => state.user)
+console.log(user);
   const [searchTerm, SetSearchTerm] = useState("");
   const [searchdata, setSearchdata] = useState(null);
   const [active,setActive]=useState(false);
