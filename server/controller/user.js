@@ -8,7 +8,6 @@ const jwt = require("jsonwebtoken");
 
 
 const path = require("path");
-const user = require("../model/user");
 const sendMail = require("../utils/sendMail");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
@@ -28,16 +27,23 @@ router.post("/create-user",upload.single("file"), async(req , res, next) =>{
 
         return next(new ErrorHandler ("user already Exists",400));
     }
+   
     const filename = req.file.filename;
     const fileUrl = path.join(filename);
     const user = {
         name : name,
         email : email,
         password : password,
-        avatar: fileUrl,
+        avatar: {
+            public_id : fileUrl,
+            url:fileUrl
+        },
+
     };
     
+
     const activationToken = createActivationToken(user);
+
     const activationUrl = `http://localhost:5173/activation/${activationToken}`;
     try {
        await sendMail ({
@@ -126,6 +132,23 @@ catchAsyncErrors (async(req, res, next)=>{
         });
     } catch (err) {
       return next(new ErrorHandler(err.message,500)); 
+    }
+})
+);
+//logout
+router.get("/logout",isAuthenticated,catchAsyncErrors(async(req,res,next)=>{
+    try{
+        res.cookie("token", null,{
+            expires : new Date(Date.now()),
+            httpOnly : true,
+        });
+        res.status(201).json({
+            success : true,
+            message : "Logout Successful"
+        });
+
+    }catch(err){
+        return next(new ErrorHandler(err.message,500))
     }
 })
 );

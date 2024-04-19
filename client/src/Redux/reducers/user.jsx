@@ -10,7 +10,7 @@ const userSlice = createSlice({
     name:"user",
     initialState:initialState,
     reducers:{
-        loadUserRequest(){
+        loadUserRequest(state ,action){
             state.loading = true;
         },
         loadUserSuccess(state,action){

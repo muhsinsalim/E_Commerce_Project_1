@@ -9,14 +9,19 @@ import Dropdown from "./Dropdown";
 import NavBar from "./NavBar";
 import {CgProfile} from "react-icons/cg"
 import {  useSelector } from "react-redux";
+import Cart from "../Cart/Cart";
+import WishList from "../WishList/WishList";
+import { backend_url } from "../../server";
+
 const Header = ({activeHeading}) => {
   const {isAuthenticated,user } = useSelector((state) => state.user)
-console.log(user);
+// console.log(user);
   const [searchTerm, SetSearchTerm] = useState("");
   const [searchdata, setSearchdata] = useState(null);
   const [active,setActive]=useState(false);
   const [dropDown , setDropDown]=useState(false)
-
+  const [openCart, setOpenCart] = useState(false)
+  const [openWishList,setOpenWishlist]=useState(false)
   const handleSearchChange = (e) => {
     const term = e.target.value;
     SetSearchTerm(term);
@@ -112,26 +117,52 @@ console.log(user);
         <div className=" flex">
 
         <div className={`${styles.normalFlex}`}>
-          <div className=" relative cursor-pointer mr-[15px]">
+          <div className=" relative cursor-pointer mr-[15px]"
+           onClick={()=>setOpenWishlist(true)}>
             <AiOutlineHeart size={30} color=" rgb(255 255 255 /83%)"/>
             <span className=" absolute right-0 top-0 rounded-full bg-[#d6249b] w-4 h-4 top right-p-0 m-0 text-white font-meno text-[12px] leading-tight text-center">0</span>
           </div>
         </div>
         <div className={`${styles.normalFlex}`}>
-          <div className=" relative cursor-pointer mr-[15px]">
-            <AiOutlineShoppingCart size={30} color=" rgb(255 255 255 /83%)"/>
-            <span className=" absolute right-0 top-0 rounded-full bg-[#d6249b] w-4 h-4 top right-p-0 m-0 text-white font-meno text-[12px] leading-tight text-center">1</span>
-          </div>
-        </div>
-        <div className={`${styles.normalFlex}`}>
-          <div className=" relative cursor-pointer mr-[15px]">
-            <Link to="/login">
-            <CgProfile size={30} color=" rgb(255 255 255 /83%)"/>
-            </Link>
-           
-           
-          </div>
-        </div>
+              <div className="relative cursor-pointer mr-[15px]"
+              onClick={()=>setOpenCart(true)}>
+                <AiOutlineShoppingCart
+                  size={30}
+                  color="rgb(255 255 255 / 83%)"
+                />
+                <span className="absolute right-0 top-0 rounded-full bg-[#d6249b] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center ">
+                  1{" "}
+                </span>
+              </div>
+            </div>
+            <div className={`${styles.normalFlex}`}>
+              <div className="relative cursor-pointer mr-[15px]">
+                {isAuthenticated ? (
+                  <Link to="/profile">
+                    <img
+                      src={`${backend_url}${user.avatar.public_id}`}
+                      alt=""
+                      className="w-[38px] h-[40px] rounded-full"
+                    />
+                  </Link>
+                ) : (
+                  <Link to={"/login"}>
+                    <CgProfile size={30} color="rgb(255 255 255 / 83%)" />
+                  </Link>
+                )}
+              </div>
+            </div>
+        {
+          //cart popup
+          openCart ? <Cart setOpenCart={setOpenCart}/> : null
+        }
+        {
+          openWishList ? (
+            <WishList setOpenWishlist={setOpenWishlist}/>
+          ):(
+            null
+          )
+        }
         </div>
       </div>
 

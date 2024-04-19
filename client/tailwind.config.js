@@ -9,7 +9,7 @@ export default {
       Roboto: ["Roboto", "sans-serif"],
       Poppins: ["Poppins", "sans-serif"],
     },
-  },
+ 
   extend: {
     screens: {
       "1000px": "1050px",
@@ -19,5 +19,6 @@ export default {
       "400px": "400px",
     },
   },
+},
   plugins: [],
 };
